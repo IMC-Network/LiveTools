@@ -3,7 +3,7 @@
     --uiColour: #00b0f0;
     --uiTextColour: white;
     --uiHoverColour: #029bd3;
-    --uiDeselectedColour: #029bd3;
+    --uiSelectedColour: #018abc;
     --uiFlatTextColour: #00b0f0;
     --uiInputColour: #e5e5e5;
     --uiInputTextColour: black;
@@ -40,25 +40,31 @@ nav {
     margin: 0;
     padding-left: 10px;
     padding-right: 10px;
-    width: 100%;
+    width: calc(100% - 20px);
     height: 40px;
+    white-space: nowrap;
+    overflow-y: auto;
     background-color: var(--uiColour);
     color: white;
 }
 
 nav > a {
-    display: inline-block;
+    display: inline-flex;
     padding: 5px;
     height: calc(100% - 10px);
+    align-items: center;
     vertical-align: middle;
     font-size: 20px;
     color: inherit;
 }
 
+nav > a.selected {
+    background-color: var(--uiSelectedColour);
+}
+
 nav > a > * {
     vertical-align: middle;
 }
-
 
 nav > a:hover {
     text-decoration: none;
