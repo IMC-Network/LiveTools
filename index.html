@@ -7,25 +7,46 @@
         <link rel="shortcut icon" href="media/Account.png">        
         <link rel="stylesheet" href="https://imcnetwork.cf/lib/tools/jquery-ui.min.css">
         <link rel="stylesheet" href="https://imcnetwork.cf/lib/IMCUI/style.css">
+        <link rel="stylesheet" href="https://imcnetwork.cf/lib/lcApps/style.css">
         <link rel="stylesheet" href="style.css">
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
+        <script>
+            var firebaseConfig = {
+                apiKey: "AIzaSyCrsNX8TZISaUDMqtJ4eP9b3fHkA79FhAo",
+                authDomain: "imc-livecloud.firebaseapp.com",
+                databaseURL: "https://imc-livecloud.firebaseio.com",
+                projectId: "imc-livecloud",
+                storageBucket: "imc-livecloud.appspot.com",
+                messagingSenderId: "622624800406",
+                appId: "1:622624800406:web:303bdfc9e0b04138088cb7"
+            };
+            
+            firebase.initializeApp(firebaseConfig);
+        </script>
         <script src="https://imcnetwork.cf/lib/tools/jquery.min.js"></script>
         <script src="https://imcnetwork.cf/lib/tools/jquery-ui.min.js"></script>
         <script src="https://imcnetwork.cf/lib/tools/touchpunch.min.js"></script>
         <script src="https://imcnetwork.cf/lib/IMCUI/script.js"></script>
         <script src="https://imcnetwork.cf/lib/tools/lang.js"></script>
+        <script src="https://imcnetwork.cf/lib/lcApps/script.js"></script>
         <script src="lang/overrides.js"></script>
         <script src="script.js"></script>
+        <script src="index.js"></script>
     </head>
     <body>
         <nav>
             <a href="index.html"><img src="media/White.png" alt="IMC">&nbsp;<span>LiveTools</span></a>
-            <a href="https://imcnetwork.cf"><span>imcnetwork.cf</span></a>
         </nav>
         <main>
             <section>
-                <h1>IMC LiveTools</h1>
-                <p>Coming soon! Check back later for live production tools, or visit our website, <a href="https://imcnetwork.cf/" target="_blank">imcnetwork.cf</a>.</p>
-                <p>Copyright &copy; IMC. All Rights Reserved.</p>
+                <h1>Your Programmes</h1>
+                <div class="programmesList myProgrammes">
+                    <div class="programmesListLoader">
+                        <img src="https://imcnetwork.cf/LiveCloud/media/Loader.png" alt="Loading..." class="loader" />
+                    </div>
+                </div>
             </section>
         </main>
         <div class="dialogBackground"></div>
