@@ -2,7 +2,7 @@ function newProgramme() {
     dialog("New programme", `
         <div>
             Create a new programme that can contain episodes. You can modify
-            other aspects such as the thumbnail text appearance later.
+            this information and much more later.
         </div>
         <div class="spacedTop">
             <label>
