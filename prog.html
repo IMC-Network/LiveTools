@@ -33,19 +33,48 @@
         <script src="https://imcnetwork.cf/lib/lcApps/script.js"></script>
         <script src="lang/overrides.js"></script>
         <script src="script.js"></script>
-        <script src="index.js"></script>
+        <script src="prog.js"></script>
     </head>
     <body>
         <nav>
             <a href="index.html"><img src="media/White.png" alt="IMC">&nbsp;<span>LiveTools</span></a>
-            <a href="javascript:newProgramme();">New programme</a>
+            <a href="index.html">Programmes</a>
+            <a href="index.html">New episode</a>
         </nav>
         <main>
+            <header class="loadingSection">
+                <div class="breadcrumbs">
+                    <a href="index.html">Programmes</a>
+                    <a href="prog.html" class="progName progLink"></a>
+                </div>
+            </header>
             <section>
-                <h1>Your programmes</h1>
-                <div class="programmesList myProgrammes">
-                    <div class="pageLoader">
-                        <img src="https://imcnetwork.cf/LiveCloud/media/Loader.png" alt="Loading..." class="loader" />
+                <div class="pageLoader">
+                    <img src="https://imcnetwork.cf/LiveCloud/media/Loader.png" alt="Loading..." class="loader" />
+                </div>
+                <div class="loadingSection">
+                    <h1 class="progName"></h1>
+                    <p><span class="progDescription"></span> <a href="javascript:editProgrammeDescription();">Edit description</a></p>
+                    <h2>Episodes</h2>
+                    <div class="tableHolder">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Slug</th>
+                                    <th>First TX date</th>
+                                    <th width="120">Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Test</td>
+                                    <td>Test</td>
+                                    <td>
+                                        <button>Edit</button>
+                                        <button>Delete</button>
+                                    </td>
+                                </tr>
+                        </table>
                     </div>
                 </div>
             </section>

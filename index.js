@@ -31,13 +31,21 @@ function newProgrammeAction() {
     } else {
         firebase.database().ref("orgs/" + currentUser.orgName + "/programmes").push().set({
             name: $(".newProgrammeName").val().trim(),
-            thumbnail: $(".newProgrammeThumbnail").val().trim() == "" ? null : $(".newProgrammeThumbnail").val()
+            thumbnail: $(".newProgrammeThumbnail").val().trim() == "" ? null : $(".newProgrammeThumbnail").val().trim()
         }).then(function() {
+            $(".dialog button:last").attr("disabled", null);
+
             closeDialog();
         }).catch(function() {
             $(".dialog button:last").attr("disabled", null);
 
-            $(".newProgrammeError").text("Your programme could not be created. Please try again later.");            
+            $(".newProgrammeError").text("Your programme could not be created. Please try again later.");
         });
     }
 }
+
+$(function() {
+    if (getURLParameter("prog") != null) {
+        window.location.replace("prog.html?prog=" + encodeURIComponent(getURLParameter("prog")));
+    }
+})
