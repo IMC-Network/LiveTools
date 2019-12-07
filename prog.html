@@ -39,7 +39,7 @@
         <nav>
             <a href="index.html"><img src="media/White.png" alt="IMC">&nbsp;<span>LiveTools</span></a>
             <a href="index.html">Programmes</a>
-            <a href="index.html">New episode</a>
+            <a href="javascript:newEpisode();">New episode</a>
         </nav>
         <main>
             <header class="loadingSection">
@@ -56,26 +56,7 @@
                     <h1 class="progName"></h1>
                     <p><span class="progDescription"></span> <a href="javascript:editProgrammeDescription();">Edit description</a></p>
                     <h2>Episodes</h2>
-                    <div class="tableHolder">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Slug</th>
-                                    <th>First TX date</th>
-                                    <th width="120">Options</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Test</td>
-                                    <td>Test</td>
-                                    <td>
-                                        <button>Edit</button>
-                                        <button>Delete</button>
-                                    </td>
-                                </tr>
-                        </table>
-                    </div>
+                    <div class="progEpisodes"></div>
                 </div>
             </section>
         </main>

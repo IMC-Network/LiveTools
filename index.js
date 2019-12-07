@@ -14,7 +14,7 @@ function newProgramme() {
                 <input placeholder="Enter a URL to an image (optional)" class="newProgrammeThumbnail">
             </label>
         </div>
-        <p class="newProgrammeError"></p>
+        <p class="dialogError"></p>
     `, [
         {text: "Cancel", onclick: "closeDialog();", type: "secondary"},
         {text: "Create", onclick: "newProgrammeAction();", type: "primary"}
@@ -27,7 +27,7 @@ function newProgrammeAction() {
     if ($(".newProgrammeName").val().trim() == "") {
         $(".dialog button:last").attr("disabled", null);
 
-        $(".newProgrammeError").text("It appears that you have left some fields blank. Please enter data into those fields and try again.");
+        $(".dialogError").text("It appears that you have left some fields blank. Please enter data into those fields and try again.");
     } else {
         firebase.database().ref("orgs/" + currentUser.orgName + "/programmes").push().set({
             name: $(".newProgrammeName").val().trim(),
@@ -39,7 +39,7 @@ function newProgrammeAction() {
         }).catch(function() {
             $(".dialog button:last").attr("disabled", null);
 
-            $(".newProgrammeError").text("Your programme could not be created. Please try again later.");
+            $(".dialogError").text("Your programme could not be created. Please try again later.");
         });
     }
 }
