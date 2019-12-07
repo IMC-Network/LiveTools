@@ -1,3 +1,5 @@
+var useEpisodeKey = "";
+
 function userReady() {
     firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog")).on("value", function(snapshot) {
         if (snapshot.val() == null) {
@@ -7,7 +9,7 @@ function userReady() {
             $(".progLink").attr("href", "prog.html?prog=" + encodeURIComponent(getURLParameter("prog")));
             $(".progDescription").text(snapshot.val().description || "No description provided.");
 
-            firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/episodes").on("value", function(snapshot) {
+            firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/episodes").orderByChild("firstTXDate").on("value", function(snapshot) {
                 $(".progEpisodes").html("");
 
                 if (snapshot.val() == null) {
@@ -15,7 +17,7 @@ function userReady() {
                         <p>
                             It appears that you don't have any episodes for
                             this programme yet. Add episodes by pressing the
-                            <strong>New Episode</strong> button.
+                            <strong>New episode</strong> button.
                         </p>
                     `);
                 } else {
@@ -34,22 +36,20 @@ function userReady() {
                         </div>
                     `).appendTo(".progEpisodes");
 
-                    console.log(snapshot.val());
-
-                    for (var key in snapshot.val()) {
-                        $(`
+                    snapshot.forEach(function(childSnapshot) {
+                        $(".progEpisodes table > tbody").prepend($(`
                             <tr>
                                 <td data-col="slug" class="tableColumnNoWrap"></td>
                                 <td data-col="firstTXDate" class="tableColumnNoWrap"></td>
                                 <td data-col="options" class="tableColumnNoWrap">
-                                    <button>Open</button>
-                                    <button>Delete</button>
+                                    <button data-option="open">Open</button>
+                                    <button data-option="delete">Delete</button>
                                 </td>
                             </tr>
-                        `).appendTo(".progEpisodes table > tbody");
+                        `));
 
-                        $(".progEpisodes table > tbody [data-col='slug']:last").text(snapshot.val()[key].slug || "Untitled");
-                        $(".progEpisodes table > tbody [data-col='firstTXDate']:last").text(new Date(snapshot.val()[key].firstTXDate).toLocaleDateString({
+                        $(".progEpisodes table > tbody [data-col='slug']:first").text(childSnapshot.val().slug || "Untitled");
+                        $(".progEpisodes table > tbody [data-col='firstTXDate']:first").text(new Date(childSnapshot.val().firstTXDate).toLocaleDateString(lang.lang, {
                             weekday: "long",
                             year: "numeric",
                             month: "long",
@@ -57,7 +57,13 @@ function userReady() {
                             hour: "numeric",
                             minute: "numeric"
                         }) || "Unknown");
-                    }
+
+                        (function(key) {
+                            $(".progEpisodes table > tbody [data-col='options']:first [data-option='delete']").click(function() {
+                                deleteEpisode(key);
+                            });
+                        })(childSnapshot.key);
+                    });
                 }
             });
 
@@ -93,10 +99,10 @@ function newEpisode() {
 function newEpisodeAction() {
     $(".dialog button:last").attr("disabled", "true");
 
-    if ($(".newEpisodeFirstTXDate").val().trim() == "" || $(".newEpisodeFirstTXDate").val().trim() == "" || new Date($(".newEpisodeFirstTXDate").val().trim()).getTime() == NaN) {
+    if ($(".newEpisodeFirstTXDate").val().trim() == "" || $(".newEpisodeFirstTXDate").val().trim() == "" || isNaN(new Date($(".newEpisodeFirstTXDate").val().trim()).getTime())) {
         $(".dialog button:last").attr("disabled", null);
 
-        $(".dialogError").text("It appears that you have left some fields blank. Please enter data into those fields and try again.");
+        $(".dialogError").text("It appears that you have left some fields blank or incorrectly formatted. Please enter data into those fields and try again.");
     } else {
         firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/episodes").push().set({
             slug: $(".newEpisodeSlug").val().trim(),
@@ -111,6 +117,35 @@ function newEpisodeAction() {
             $(".dialogError").text("Your new programme description could not be saved. Please try again later.");
         });
     }
+}
+
+function deleteEpisode(episodeKey) {
+    useEpisodeKey = episodeKey;
+
+    dialog("Delete episode", `
+        <div>
+            Do you really want to delete this episode? Once deleted, the
+            episode cannot be recovered.
+        </div>
+        <p class="dialogError"></p>
+    `, [
+        {text: "Cancel", onclick: "closeDialog();", type: "secondary"},
+        {text: "Delete", onclick: "deleteEpisodeAction();", type: "primary"}
+    ]);
+}
+
+function deleteEpisodeAction() {
+    $(".dialog button:last").attr("disabled", "true");
+
+    firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/episodes/" + useEpisodeKey).remove().then(function() {
+        $(".dialog button:last").attr("disabled", null);
+
+        closeDialog();
+    }).catch(function() {
+        $(".dialog button:last").attr("disabled", null);
+
+        $(".dialogError").text("Your episode could not be deleted. Please try again later.");
+    });
 }
 
 function editProgrammeDescription() {
