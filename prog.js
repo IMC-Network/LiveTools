@@ -1,10 +1,10 @@
 var useEpisodeKey = "";
 var useTemplateKey = "";
 
-function userReady() {
+events.userReady.push(function() {
     firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog")).on("value", function(snapshot) {
         if (snapshot.val() == null) {
-            window.location.href = "index.html";
+            window.location.replace("index.html");
         } else {
             $(".progName").text(snapshot.val().name || "Untitled");
             $(".progLink").attr("href", "prog.html?prog=" + encodeURIComponent(getURLParameter("prog")));
@@ -156,7 +156,7 @@ function userReady() {
             $(".loadingSection").show();
         }
     });
-}
+});
 
 function editProgrammeDescription() {
     dialog("Edit programme description", `

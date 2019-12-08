@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>IMC LiveTools</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes, minimal-ui">
+        <meta name="description" content="Collaborate on live programming easily using IMC LiveTools.">
+        <link rel="shortcut icon" href="media/Account.png">        
+        <link rel="stylesheet" href="https://imcnetwork.cf/lib/tools/jquery-ui.min.css">
+        <link rel="stylesheet" href="https://imcnetwork.cf/lib/IMCUI/style.css">
+        <link rel="stylesheet" href="https://imcnetwork.cf/lib/lcApps/style.css">
+        <link rel="stylesheet" href="style.css">
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
+        <script>
+            var firebaseConfig = {
+                apiKey: "AIzaSyCrsNX8TZISaUDMqtJ4eP9b3fHkA79FhAo",
+                authDomain: "imc-livecloud.firebaseapp.com",
+                databaseURL: "https://imc-livecloud.firebaseio.com",
+                projectId: "imc-livecloud",
+                storageBucket: "imc-livecloud.appspot.com",
+                messagingSenderId: "622624800406",
+                appId: "1:622624800406:web:303bdfc9e0b04138088cb7"
+            };
+            
+            firebase.initializeApp(firebaseConfig);
+        </script>
+        <script src="https://imcnetwork.cf/lib/tools/jquery.min.js"></script>
+        <script src="https://imcnetwork.cf/lib/tools/jquery-ui.min.js"></script>
+        <script src="https://imcnetwork.cf/lib/tools/touchpunch.min.js"></script>
+        <script src="https://imcnetwork.cf/lib/IMCUI/script.js"></script>
+        <script src="https://imcnetwork.cf/lib/tools/lang.js"></script>
+        <script src="https://imcnetwork.cf/lib/lcApps/script.js"></script>
+        <script src="lang/overrides.js"></script>
+        <script src="script.js"></script>
+        <script src="prog.js"></script>
+        <script src="progEpisode.js"></script>
+    </head>
+    <body>
+        <nav>
+            <a href="index.html"><img src="media/White.png" alt="IMC">&nbsp;<span>LiveTools</span></a>
+            <a href="index.html">Programmes</a>
+            <a href="prog.html" class="progLink">Episodes</a>
+        </nav>
+        <main>
+            <header class="loadingSection">
+                <div class="breadcrumbs">
+                    <a href="index.html">Programmes</a>
+                    <a href="prog.html" class="progName progLink"></a>
+                    <a href="progEpsiode.html" class="progEpisodeName progEpisodeLink"></a>
+                </div>
+            </header>
+            <section>
+                <div class="pageLoader">
+                    <img src="https://imcnetwork.cf/LiveCloud/media/Loader.png" alt="Loading..." class="loader" />
+                </div>
+                <div class="loadingSection">
+                    <h1 class="progEpisodeName"></h1>
+                </div>
+            </section>
+        </main>
+        <div class="dialogBackground"></div>
+        <div class="dialog"></div>
+    </body>
+</html>
