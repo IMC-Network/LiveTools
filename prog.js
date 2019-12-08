@@ -168,8 +168,8 @@ function editProgrammeDescription() {
     firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/description").once("value", function(snapshot) {
         dialog("Edit programme description", `
             <div>
-                Edit the description of your programme so that others can
-                gain a better understanding of what your programme is.
+                Edit the description of your programme so that others can gain
+                a better understanding of what your programme is.
             </div>
             <div class="spacedTop">
                 <label>
