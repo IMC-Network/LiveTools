@@ -72,6 +72,10 @@ function userReady() {
                         }
 
                         (function(key) {
+                            $(".progEpisodes table > tbody [data-col='options']:first [data-option='open']").click(function() {
+                                window.location.href = "progEpisode.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&episode=" + encodeURIComponent(key);
+                            });
+
                             $(".progEpisodes table > tbody [data-col='options']:first [data-option='delete']").click(function() {
                                 deleteEpisode(key);
                             });
@@ -136,6 +140,10 @@ function userReady() {
                         }) || "Unknown");
 
                         (function(key) {
+                            $(".progTemplates table > tbody [data-col='options']:first [data-option='open']").click(function() {
+                                window.location.href = "progEpisode.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(key);
+                            });
+
                             $(".progTemplates table > tbody [data-col='options']:first [data-option='delete']").click(function() {
                                 deleteTemplate(key);
                             });
