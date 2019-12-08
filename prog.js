@@ -62,11 +62,11 @@ function userReady() {
                             minute: "numeric"
                         }) || "Unknown");
 
-                        if (childSnapshot.val().templateUsedKey != null) {
-                            $(".progEpisodes table > tbody [data-col='templateUsed']:first").append("<a>")
-                                .attr("href", "progEpisode.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(childSnapshot.val().templateUsedKey))
-                                .text(childSnapshot.val().templateUsedSlug || "Untitled")
-                            ;
+                        if (childSnapshot.val().templateKey != null) {
+                            $(".progEpisodes table > tbody [data-col='templateUsed']:first").append($("<a>")
+                                .attr("href", "progEpisode.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(childSnapshot.val().templateKey))
+                                .text(childSnapshot.val().templateSlug || "Untitled")
+                            );
                         } else {
                             $(".progEpisodes table > tbody [data-col='templateUsed']:first").text("(None)");
                         }
@@ -196,25 +196,46 @@ function editProgrammeDescriptionAction() {
 
 function newEpisode() {
     dialog("New episode", `
-        <div>
-            Create a new episode as part of the programme. Templates will be
-            copied over so that you can easily create the episode.
+        <div class="dialogLoader">
+            <img src="https://imcnetwork.cf/LiveCloud/media/Loader.png" alt="Loading..." class="loader" />
         </div>
-        <div class="spacedTop">
-            <label>
-                <span>Slug</span>
-                <input placeholder="Enter the name of the episode" class="newEpisodeSlug">
-            </label>
-            <label>
-                <span>First TX date</span>
-                <input type="datetime-local" class="newEpisodeFirstTXDate">
-            </label>
-        </div>
-        <p class="dialogError"></p>
-    `, [
-        {text: "Cancel", onclick: "closeDialog();", type: "secondary"},
-        {text: "Create", onclick: "newEpisodeAction();", type: "primary"}
-    ]);
+    `, [], false);
+
+    firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/templates").once("value", function(snapshot) {
+        dialog("New episode", `
+            <div>
+                Create a new episode as part of the programme. Templates will be
+                copied over so that you can easily create the episode.
+            </div>
+            <div class="spacedTop">
+                <label>
+                    <span>Slug</span>
+                    <input placeholder="Enter the name of the episode" class="newEpisodeSlug">
+                </label>
+                <label>
+                    <span>First TX date</span>
+                    <input type="datetime-local" class="newEpisodeFirstTXDate">
+                </label>
+                <label>
+                    <span>Template</span>
+                    <select class="newEpisodeTemplate">
+                        <option value="\\none">(None)</option>
+                    </select>
+                </label>
+            </div>
+            <p class="dialogError"></p>
+        `, [
+            {text: "Cancel", onclick: "closeDialog();", type: "secondary"},
+            {text: "Create", onclick: "newEpisodeAction();", type: "primary"}
+        ]);
+
+        snapshot.forEach(function(childSnapshot) {
+            $(".newEpisodeTemplate").append($("<option>")
+                .attr("value", childSnapshot.key)
+                .text(childSnapshot.val().slug)
+            );
+        });
+    });
 }
 
 function newEpisodeAction() {
@@ -225,18 +246,39 @@ function newEpisodeAction() {
 
         $(".dialogError").text("It appears that you have left some fields blank or incorrectly formatted. Please enter data into those fields and try again.");
     } else {
-        firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/episodes").push().set({
-            slug: $(".newEpisodeSlug").val().trim(),
-            firstTXDate: new Date($(".newEpisodeFirstTXDate").val().trim()).getTime()
-        }).then(function() {
-            $(".dialog button:last").attr("disabled", null);
+        function newEpisodeWithContent(templateContent = {}, templateKey = null, templateSlug = null) {
+            firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/episodes").push().set({
+                slug: $(".newEpisodeSlug").val().trim(),
+                firstTXDate: new Date($(".newEpisodeFirstTXDate").val().trim()).getTime(),
+                content: templateContent,
+                templateKey: templateKey,
+                templateSlug: templateSlug
+            }).then(function() {
+                $(".dialog button:last").attr("disabled", null);
+    
+                closeDialog();
+            }).catch(function() {
+                $(".dialog button:last").attr("disabled", null);
+    
+                $(".dialogError").text("Your new episode could not be created. Please try again later.");
+            });
+        }
 
-            closeDialog();
-        }).catch(function() {
-            $(".dialog button:last").attr("disabled", null);
+        if ($(".newEpisodeTemplate").val() == "\\none") {
+            newEpisodeWithContent({});
+        } else {
+            firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/templates/" + $(".newEpisodeTemplate").val()).once("value", function(snapshot) {
+                if (snapshot.val().content == null) {
+                    newEpisodeWithContent({}, snapshot.key, snapshot.val().slug);
+                } else {
+                    newEpisodeWithContent(snapshot.val().content, snapshot.key, snapshot.val().slug);
+                }                
+            }).catch(function() {
+                $(".dialog button:last").attr("disabled", null);
 
-            $(".dialogError").text("Your new episode could not be created. Please try again later.");
-        });
+                $(".dialogError").text("The template your new episode could not be retrieved. Please try again later.");
+            });
+        }
     }
 }
 
