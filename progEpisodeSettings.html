@@ -35,13 +35,13 @@
         <script src="script.js"></script>
         <script src="prog.js"></script>
         <script src="progEpisode.js"></script>
+        <script src="progSettings.js"></script>
     </head>
     <body>
         <nav>
             <a href="index.html"><img src="media/White.png" alt="IMC">&nbsp;<span>LiveTools</span></a>
             <a href="index.html">Programmes</a>
             <a href="prog.html" class="progLink">Episodes</a>
-            <a href="progEpisodeSettings.html" class="progEpisodeSettingsLink">Settings</a>
         </nav>
         <main>
             <header class="loadingSection">
@@ -49,6 +49,7 @@
                     <a href="index.html">Programmes</a>
                     <a href="prog.html" class="progName progLink"></a>
                     <a href="progEpsiode.html" class="progEpisodeName progEpisodeLink"></a>
+                    <a href="progEpisodeSettings.html" class="progEpisodeSettingsLink">Settings</a>
                 </div>
             </header>
             <section>
@@ -56,9 +57,19 @@
                     <img src="https://imcnetwork.cf/LiveCloud/media/Loader.png" alt="Loading..." class="loader" />
                 </div>
                 <div class="loadingSection">
-                    <h1 class="progEpisodeName"></h1>
-                    <p><span class="progEpisodeDescription"></span> <a href="javascript:editEpisodeDescription();">Edit description</a></p>
-                    <p class="progEpisodeOnly">Template: <span class="progEpisodeTemplateA">(None)</span></p>
+                    <h1>Settings</h1>
+                    <label>
+                        <span>Slug</span>
+                        <input onchange="updateSetting('slug');" data-setting="slug" class="setting">
+                    </label>
+                    <label>
+                        <span>Description</span>
+                        <textarea onchange="updateSetting('description');" data-setting="description" class="setting"></textarea>
+                    </label>
+                    <label>
+                        <span>First TX date</span>
+                        <input type="datetime-local" onchange="updateSetting('firstTXDate');" data-setting="firstTXDate" class="setting"></input>
+                    </label>
                 </div>
             </section>
         </main>

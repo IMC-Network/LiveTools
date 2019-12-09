@@ -19,8 +19,32 @@ events.userReady.push(function() {
 
             if (getURLParameter("episode") != null) {
                 $(".progEpisodeLink").attr("href", "progEpisode.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&episode=" + encodeURIComponent(getURLParameter("episode")));
+                $(".progEpisodeSettingsLink").attr("href", "progEpisodeSettings.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&episode=" + encodeURIComponent(getURLParameter("episode")));
+
+                if (snapshot.val().templateKey != null) {
+                    $(".progEpisodeTemplateSlug").text(snapshot.val().templateSlug || "Untitled");
+                    $(".progEpisodeTemplateA").replaceWith(function() {
+                        return $("<a class='progEpisodeTemplateLink'>")
+                            .text(snapshot.val().templateSlug || "Untitled")
+                            .attr("href", "progEpisode.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(snapshot.val().templateKey))
+                        ;
+                    });
+                } else {
+                    $(".progEpisodeTemplateA").replaceWith(function() {
+                        return $("<span class='progEpisodeTemplateLink'>").html("(None)");
+                    });
+                }
+
+                $(".progEpisodeOnly").show();
+                $(".progTemplateOnly").hide();
             } else if (getURLParameter("template") != null) {
                 $(".progEpisodeLink").attr("href", "progEpisode.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(getURLParameter("template")));
+                $(".progEpisodeSettingsLink").attr("href", "progEpisodeSettings.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(getURLParameter("template")));
+                $(".progEpisodeTemplateA").replaceWith(function() {
+                    $("<span class='progEpisodeTemplateLink'>").html("(None)");
+                });
+                $(".progEpisodeOnly").hide();
+                $(".progTemplateOnly").show();
             }
 
             $(".progEpisodeDescription").text(snapshot.val().description || "No description provided.");
