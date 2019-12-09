@@ -9,6 +9,7 @@ events.userReady.push(function() {
             $(".progName").text(snapshot.val().name || "Untitled");
             $(".progLink").attr("href", "prog.html?prog=" + encodeURIComponent(getURLParameter("prog")));
             $(".progTemplatesLink").attr("href", "progTemplates.html?prog=" + encodeURIComponent(getURLParameter("prog")));
+            $(".progSettingsLink").attr("href", "progSettings.html?prog=" + encodeURIComponent(getURLParameter("prog")));
             $(".progDescription").text(snapshot.val().description || "No description provided.");
 
             firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/episodes").orderByChild("firstTXDate").on("value", function(snapshot) {

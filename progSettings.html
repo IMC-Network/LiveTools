@@ -34,21 +34,21 @@
         <script src="lang/overrides.js"></script>
         <script src="script.js"></script>
         <script src="prog.js"></script>
+        <script src="progSettings.js"></script>
     </head>
     <body>
         <nav>
             <a href="index.html"><img src="media/White.png" alt="IMC">&nbsp;<span>LiveTools</span></a>
             <a href="index.html">Programmes</a>
             <a href="prog.html" class="progLink">Episodes</a>
-            <a href="javascript:newTemplate();">New template</a>
-            <a hrer="progSettings.html" class="progSettingsLink">Settings</a>
+            <a href="progTemplates.html" class="progTemplatesLink">Templates</a>
         </nav>
         <main>
             <header class="loadingSection">
                 <div class="breadcrumbs">
                     <a href="index.html">Programmes</a>
                     <a href="prog.html" class="progName progLink"></a>
-                    <a href="progTemplates.html" class="progTemplatesLink">Templates</a>
+                    <a href="progSettings.html" class="progSettingsLink">Settings</a>
                 </div>
             </header>
             <section>
@@ -56,8 +56,23 @@
                     <img src="https://imcnetwork.cf/LiveCloud/media/Loader.png" alt="Loading..." class="loader" />
                 </div>
                 <div class="loadingSection">
-                    <h1>Templates</h1>
-                    <div class="progTemplates"></div>
+                    <h1>Settings</h1>
+                    <label>
+                        <span>Name</span>
+                        <input onchange="updateSetting('name');" data-setting="name" class="setting">
+                    </label>
+                    <label>
+                        <span>Description</span>
+                        <textarea onchange="updateSetting('description');" data-setting="description" class="setting"></textarea>
+                    </label>
+                    <label>
+                        <span>Thumbnail</span>
+                        <input onchange="updateSetting('thumbnail');" data-setting="thumbnail" class="setting">
+                    </label>
+                    <label>
+                        <span>Show thumbnail text on Programmes page</span>
+                        <input type="checkbox" onchange="updateSetting('textShows');" data-setting="textShows" class="setting">
+                    </label>
                 </div>
             </section>
         </main>
