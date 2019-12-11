@@ -258,6 +258,7 @@ function newEpisodeAction() {
         function newEpisodeWithContent(templateContent = {}, templateKey = null, templateSlug = null) {
             firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/episodes").push().set({
                 slug: $(".newEpisodeSlug").val().trim(),
+                name: $(".newEpisodeSlug").val().trim(),
                 firstTXDate: new Date($(".newEpisodeFirstTXDate").val().trim()).getTime(),
                 content: templateContent,
                 templateKey: templateKey,
