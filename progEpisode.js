@@ -20,6 +20,10 @@ events.userReady.push(function() {
             if (getURLParameter("episode") != null) {
                 $(".progEpisodeLink").attr("href", "progEpisode.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&episode=" + encodeURIComponent(getURLParameter("episode")));
                 $(".progEpisodeSettingsLink").attr("href", "progEpisodeSettings.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&episode=" + encodeURIComponent(getURLParameter("episode")));
+                $(".progEpisodeScriptLink").attr("href", "progEpisodeScript.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&episode=" + encodeURIComponent(getURLParameter("episode")));
+                $(".progEpisodeLibraryLink").attr("href", "progEpisodeLibrary.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&episode=" + encodeURIComponent(getURLParameter("episode")));
+                $(".progEpisodeStudioLink").attr("href", "progEpisodeStudio.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&episode=" + encodeURIComponent(getURLParameter("episode")));
+                $(".progEpisodeDashboardLink").attr("href", "progEpisodeDashboard.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&episode=" + encodeURIComponent(getURLParameter("episode")));
 
                 if (snapshot.val().templateKey != null) {
                     $(".progEpisodeTemplateSlug").text(snapshot.val().templateSlug || "Untitled");
@@ -40,6 +44,10 @@ events.userReady.push(function() {
             } else if (getURLParameter("template") != null) {
                 $(".progEpisodeLink").attr("href", "progEpisode.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(getURLParameter("template")));
                 $(".progEpisodeSettingsLink").attr("href", "progEpisodeSettings.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(getURLParameter("template")));
+                $(".progEpisodeScriptLink").attr("href", "progEpisodeScript.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(getURLParameter("template")));
+                $(".progEpisodeLibraryLink").attr("href", "progEpisodeLibrary.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(getURLParameter("template")));
+                $(".progEpisodeStudioLink").attr("href", "progEpisodeStudio.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(getURLParameter("template")));
+                $(".progEpisodeDashboardLink").attr("href", "progEpisodeDashboard.html?prog=" + encodeURIComponent(getURLParameter("prog")) + "&template=" + encodeURIComponent(getURLParameter("template")));
                 $(".progEpisodeTemplateA").replaceWith(function() {
                     $("<span class='progEpisodeTemplateLink'>").html("(None)");
                 });
