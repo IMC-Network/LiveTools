@@ -2,3 +2,17 @@
     --navBackgroundColour: #00b0f0;
     --navForegroundColour: white;
 }
+
+.script {
+    height: calc(100% - 100px)!important;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.script section.directive {
+    margin: 5px;
+    margin-left: calc(10vw - 5px);
+    margin-right: calc(10vw - 5px);
+    padding: 5px;
+    background-color: var(--highlightBackgroundColour);
+}
