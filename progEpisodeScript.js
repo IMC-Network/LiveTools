@@ -10,7 +10,7 @@ function timeToDuration(time) {
 
 function getParagraphDuration(element) {
     if (isNaN(Number($(element).attr("data-duration")))) {
-        return $(element).text().trim().split(" ").length * (60 / HUMAN_AVERAGE_WPM) * 1000;
+        return $(element).closest("section").text().trim().split(" ").length * (60 / HUMAN_AVERAGE_WPM) * 1000;
     } else {
         return Number($(element).attr("data-duration")) * 1000;
     }
@@ -119,7 +119,7 @@ function useContentProperties(element) {
             $("<input type='time' min='00:00:00' max='23:59:59' step='1'>")
                 .val(new Date(getParagraphDuration(element)).toISOString().split("T")[1].split(".")[0])
                 .change(function(event) {
-                    if (timeToDuration($(event.target).val()) == Math.floor($(element).text().trim().split(" ").length * (60 / HUMAN_AVERAGE_WPM))) {
+                    if (timeToDuration($(event.target).val()) == Math.floor($(element).closest("section").text().trim().split(" ").length * (60 / HUMAN_AVERAGE_WPM))) {
                         $(element).removeAttr("data-duration");
                     } else {
                         $(element).attr("data-duration", timeToDuration($(event.target).val()));
