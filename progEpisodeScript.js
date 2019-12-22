@@ -91,6 +91,20 @@ function useSectionProperties(element) {
             $("<input type='time' disabled>")
                 .attr("title", "This is the total duration of this section.")
                 .val(new Date(getSectionDuration(element)).toISOString().split("T")[1].split(".")[0])
+        ]),
+        $("<div>").append([
+            $("<button class='maxWidth lineSpace'>")
+                .text("Delete section")
+                .attr("title", "Delete this section and its contents.")
+                .click(function() {
+                    if ($(".script").children().length > 1) {
+                        $(element).closest("details").remove();
+
+                        useScriptProperties();
+                    } else {
+                        alert("There is only one section in this script; you cannot have a script with no sections.", "Cannot delete section");
+                    }
+                })
         ])
     ]);
 }
