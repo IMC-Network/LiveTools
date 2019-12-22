@@ -1,5 +1,23 @@
 const HUMAN_AVERAGE_WPM = 150;
 
+var lastSavedContentTimeout;
+var lastSavedNameTimeout;
+var scriptActiveElement = null;
+
+function generateRandomKey(length = 16, digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_") {
+    var key = "";
+
+    for (var i = 0; i < length; i++) {
+        key += digits.charAt(Math.floor(Math.random() * digits.length));
+    }
+
+    return key;
+}
+
+function cleanHTML(html) {
+    return html.replace(/<script/g, "&lt;script").replace(/<\/script/g, "&lt;/script").replace(/<style/g, "&lt;style").replace(/<\/style/g, "&lt;/style").replace(/<link/g, "&lt;link");
+}
+
 function timeToDuration(time) {
     var hours = Number(time.split(":")[0]) || 0;
     var minutes = Number(time.split(":")[1]) || 0;
@@ -8,11 +26,58 @@ function timeToDuration(time) {
     return (hours * 60 * 60) + (minutes * 60) + seconds;
 }
 
+function loadScript() {
+    firebase.database().ref(episodePath + "/content/script").once("value", function(snapshot) {
+        var sectionOrder = snapshot.val().sectionOrder;
+        var sectionNames = snapshot.val().sectionNames;
+        var sectionContents = snapshot.val().sectionContents;
+
+        $(".script").html("");
+
+        for (var i = 0; i < sectionOrder.length; i++) {
+            $(".script").append(
+                $("<details open>")
+                    .attr("data-key", sectionOrder[i])
+                    .append([
+                        $("<summary>")
+                            .append(
+                                $("<input>")
+                                    .attr("placeholder", "Untitled section")
+                                    .val(sectionNames[sectionOrder[i]] || "")
+                            )
+                        ,
+                        $("<div contenteditable='true'>").html(cleanHTML(sectionContents[sectionOrder[i]]))
+                    ])
+            );
+        }
+
+        useScriptProperties();
+    });
+}
+
+function saveScriptOrder() {
+    var sectionOrder = [];
+
+    $(".script details").each(function() {
+        sectionOrder.push($(this).attr("data-key"));
+    });
+
+    firebase.database().ref(episodePath + "/content/script/sectionOrder").set(sectionOrder);
+}
+
+function cueSaveScript(element) {
+    clearTimeout(lastSavedContentTimeout);
+
+    lastSavedContentTimeout = setTimeout(function() {
+        firebase.database().ref(episodePath + "/content/script/sectionContents/" + $(element).closest("details").attr("data-key")).set($(element).closest("details > div").html());
+    }, 1000);
+}
+
 function getParagraphDuration(element) {
-    if (isNaN(Number($(element).attr("data-duration")))) {
+    if (isNaN(Number($(element).closest("section").attr("data-duration")))) {
         return $(element).closest("section").text().trim().split(" ").length * (60 / HUMAN_AVERAGE_WPM) * 1000;
     } else {
-        return Number($(element).attr("data-duration")) * 1000;
+        return Number($(element).closest("section").attr("data-duration")) * 1000;
     }
 }
 
@@ -54,7 +119,10 @@ function useScriptProperties() {
                 .text("Add section")
                 .attr("title", "Create a new named collapsible section that can contain paragraphs and directives.")
                 .click(function() {
+                    var newSectionKey = generateRandomKey();
+
                     $("<details open>")
+                        .attr("data-key", newSectionKey)
                         .append([
                             $("<summary>").append([
                                 $(document.createTextNode(" ")),
@@ -68,6 +136,11 @@ function useScriptProperties() {
                             $(document.getSelection().anchorNode).closest(".script details")
                         )
                     ;
+
+                    firebase.database().ref(episodePath + "/content/script/sectionNames/" + newSectionKey).set("");
+                    firebase.database().ref(episodePath + "/content/script/sectionContents/" + newSectionKey).set("<section><br></section>");
+
+                    saveScriptOrder();
                 })
         ])
     ]);
@@ -98,7 +171,12 @@ function useSectionProperties(element) {
                 .attr("title", "Delete this section and its contents.")
                 .click(function() {
                     if ($(".script").children().length > 1) {
+                        firebase.database().ref(episodePath + "/content/script/sectionNames/" + $(element).closest("details").attr("data-key")).remove();
+                        firebase.database().ref(episodePath + "/content/script/sectionContents/" + $(element).closest("details").attr("data-key")).remove();
+
                         $(element).closest("details").remove();
+
+                        saveScriptOrder();
 
                         useScriptProperties();
                     } else {
@@ -149,6 +227,14 @@ function useContentProperties(element) {
                 .on("click", function() {
                     document.execCommand("italic")
                 })
+            ,
+            $("<button title='Toggle directive' aria-label='Toggle directive' class='tool'>")
+                .html("<i class='material-icons'>directions</i>")
+                .on("click", function() {
+                    $(scriptActiveElement).closest("section").toggleClass("directive");
+
+                    cueSaveScript(scriptActiveElement);
+                })
         ]),
         $("<label>").append([
             $("<span>").text("Duration"),
@@ -156,10 +242,12 @@ function useContentProperties(element) {
                 .val(new Date(getParagraphDuration(element)).toISOString().split("T")[1].split(".")[0])
                 .change(function(event) {
                     if (timeToDuration($(event.target).val()) == Math.floor($(element).closest("section").text().trim().split(" ").length * (60 / HUMAN_AVERAGE_WPM))) {
-                        $(element).removeAttr("data-duration");
+                        $(element).closest("section").removeAttr("data-duration");
                     } else {
-                        $(element).attr("data-duration", timeToDuration($(event.target).val()));
+                        $(element).closest("section").attr("data-duration", timeToDuration($(event.target).val()));
                     }
+
+                    cueSaveScript(element);
                 })
         ]),
         $("<div>").append([
@@ -203,12 +291,16 @@ events.userReady.push(function() {
         });
     });
 
-    $("body").on("keypress", ".script", function(event) {
+    $(".script").on("keypress", function(event) {
         var container = document.getSelection().anchorNode.nodeType == Node.TEXT_NODE ? document.getSelection().anchorNode.parentNode : document.getSelection().anchorNode;
         
         if (event.keyCode == 13 && !event.shiftKey) {
             setTimeout(function() {
-                $(container).closest("section").next().removeClass("directive").text("");
+                $(container).closest("section").next()
+                    .removeClass("directive")
+                    .removeAttr("data-duration")
+                    .text("")
+                ;
             });
         }
     });
@@ -217,31 +309,72 @@ events.userReady.push(function() {
         useScriptProperties();
     });
 
-    $("body").on("click focus keyup keydown keypress change paste input", ".script details > div", function(event) {
-        if (document.getSelection().anchorNode != null) {
-            var container = document.getSelection().anchorNode.nodeType == Node.TEXT_NODE ? document.getSelection().anchorNode.parentNode : document.getSelection().anchorNode;
-            
-            useContentProperties(container);
-
-            event.stopPropagation();
-        }
-    });
-
     $("body").on("click focus keyup keydown keypress change paste input", ".script details > summary", function(event) {
         if (document.getSelection().anchorNode != null) {
             var container = document.getSelection().anchorNode.nodeType == Node.TEXT_NODE ? document.getSelection().anchorNode.parentNode : document.getSelection().anchorNode;
-            
+
             useSectionProperties(container);
 
             event.stopPropagation();
         }
     });
 
+    $("body").on("click focus keyup keydown keypress change paste input", ".script details > summary > input", function(event) {
+        clearTimeout(lastSavedNameTimeout);
+
+        lastSavedNameTimeout = setTimeout(function() {
+            firebase.database().ref(episodePath + "/content/script/sectionNames/" + $(event.target).closest("details").attr("data-key")).set($(event.target).val());
+        }, 1000);
+
+        useSectionProperties($(event.target).closest("details"));
+
+        if (event.keyCode == 32) {
+            if ($(event.target).closest("details").attr("open")) {
+                $(event.target).closest("details").removeAttr("open");
+            } else {
+                $(event.target).closest("details").attr("open", "");
+            }
+        }
+
+        event.stopPropagation();
+    });
+
+    $("body").on("click focus keyup keydown keypress change paste input", ".script details > div", function(event) {
+        if (document.getSelection().anchorNode != null) {
+            var container = document.getSelection().anchorNode.nodeType == Node.TEXT_NODE ? document.getSelection().anchorNode.parentNode : document.getSelection().anchorNode;
+
+            useContentProperties(container);
+
+            event.stopPropagation();
+        }
+    });
+
+    $("body").on("change paste input", ".script details > div", function(event) {
+        cueSaveScript(event.target);
+    });
+
+    $(".script").on("click focus keyup keydown keypress change paste input", function() {
+        scriptActiveElement = document.getSelection().anchorNode;
+    });
+
     $(".script").sortable({
         handle: "summary",
         cancel: "input, details > div",
-        axis: "y"
+        axis: "y",
+        update: saveScriptOrder
     });
 
-    useScriptProperties();
+    firebase.database().ref(episodePath + "/content/script/sectionOrder").on("value", function() {
+        loadScript();
+    });
+
+    firebase.database().ref(episodePath + "/content/script/sectionContents").on("child_changed", function(snapshot) {
+        if ($(document.activeElement).closest("details").attr("data-key") != snapshot.key) {
+            $("details[data-key='" + snapshot.key + "']").find("> div").html(cleanHTML(snapshot.val()));
+        }
+    });
+
+    firebase.database().ref(episodePath + "/content/script/sectionNames").on("child_changed", function(snapshot) {
+        $("details[data-key='" + snapshot.key + "']").find("> summary > input").val(snapshot.val());
+    });
 });

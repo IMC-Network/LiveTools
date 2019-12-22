@@ -1,3 +1,13 @@
+const EPISODE_TEMPLATE_CONTENT = {
+    script: {
+        sectionOrder: ["0000000000000000"],
+        sectionNames: {"0000000000000000": "Main"},
+        sectionContents: {
+            "0000000000000000": `<section>Hello, and welcome to <span class="progName"></span>!</section>`
+        }
+    }
+};
+
 var useEpisodeKey = "";
 var useTemplateKey = "";
 
@@ -275,11 +285,11 @@ function newEpisodeAction() {
         }
 
         if ($(".newEpisodeTemplate").val() == "\\none") {
-            newEpisodeWithContent({});
+            newEpisodeWithContent(EPISODE_TEMPLATE_CONTENT);
         } else {
             firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/templates/" + $(".newEpisodeTemplate").val()).once("value", function(snapshot) {
                 if (snapshot.val().content == null) {
-                    newEpisodeWithContent({}, snapshot.key, snapshot.val().slug);
+                    newEpisodeWithContent(EPISODE_TEMPLATE_CONTENT, snapshot.key, snapshot.val().slug);
                 } else {
                     newEpisodeWithContent(snapshot.val().content, snapshot.key, snapshot.val().slug);
                 }                
@@ -354,7 +364,8 @@ function newTemplateAction() {
     } else {
         firebase.database().ref("orgs/" + currentUser.orgName + "/programmes/" + getURLParameter("prog") + "/templates").push().set({
             slug: $(".newTemplateSlug").val().trim(),
-            firstTXDate: new Date($(".newTemplateFirstTXDate").val().trim()).getTime()
+            firstTXDate: new Date($(".newTemplateFirstTXDate").val().trim()).getTime(),
+            content: EPISODE_TEMPLATE_CONTENT
         }).then(function() {
             $(".dialog button:last").attr("disabled", null);
 
