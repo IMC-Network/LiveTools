@@ -150,8 +150,8 @@ function useContentProperties(element) {
         ]),
         $("<div>").append([
             $("<button class='maxWidth lineSpace'>")
-                .text("Add controller directive below")
-                .attr("title", "Create a controller directive that can be used to alert or remind the crew about a certain event that is to be cued.")
+                .text("Add directive below")
+                .attr("title", "Create a directive that can be used to alert or remind the crew about a certain event that is to be cued.")
                 .click(function() {
                     $("<section class='directive'>").html("Write an imperative here...").insertAfter($(element).closest("section"));
                 })
@@ -160,14 +160,21 @@ function useContentProperties(element) {
                 .text("Add VT directive below")
                 .attr("title", "Create a directive that can be used to remind the crew to play a certain video tape (VT) or package.")
                 .click(function() {
-                    $("<section class='directive'>").html("<strong>[ID]</strong> Slug").insertAfter($(element).closest("section"));
+                    $("<section class='directive'>").html("<strong>[VT]</strong> Slug").insertAfter($(element).closest("section"));
+                })
+            ,
+            $("<button class='maxWidth lineSpace'>")
+                .text("Add ULAY directive below")
+                .attr("title", "Create a directive that can be used to remind the crew to play a certain underlay (ULAY) video which is played with live commentary from the presenters.")
+                .click(function() {
+                    $("<section class='directive'>").html("<strong>[ULAY]</strong> Slug").insertAfter($(element).closest("section"));
                 })
             ,
             $("<button class='maxWidth lineSpace'>")
                 .text("Add SOT directive below")
                 .attr("title", "Create a directive that can be used to remind the crew to play a certain 'sound on tape' (SOT) video which contains quoted words (which are transcribed).")
                 .click(function() {
-                    $("<section class='directive'>").html("<strong>[ID]</strong> Slug SOT<br><em>Write SOT transcription here...</em>").insertAfter($(element).closest("section"));
+                    $("<section class='directive'>").html("<strong>[SOT]</strong> Slug<br><em>Write SOT transcription here...</em>").insertAfter($(element).closest("section"));
                 })
         ])
     ]);
