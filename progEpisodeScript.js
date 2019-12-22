@@ -19,7 +19,7 @@ function getParagraphDuration(element) {
 function getSectionDuration(element) {
     var totalDuration = 0;
 
-    $(element).find("section").each(function() {
+    $(element).closest("details").find("section").each(function() {
         totalDuration += getParagraphDuration(this);
     });
 
@@ -69,6 +69,28 @@ function useScriptProperties() {
                         )
                     ;
                 })
+        ])
+    ]);
+}
+
+function useSectionProperties(element) {
+    $(".scriptPropertiesTitle").html("").append([
+        $("<a>")
+            .html("<i aria-hidden='true' class='material-icons'>arrow_left</i> Back")
+            .attr("href", "javascript:useScriptProperties();")
+        ,
+        $(document.createTextNode("Section properties"))
+    ]);
+
+    $(".scriptPropertiesContent").html("").append([
+        $("<label>").append([
+            $("<span>")
+                .attr("title", "This is the total duration of this section.")
+                .text("Duration")
+            ,
+            $("<input type='time' disabled>")
+                .attr("title", "This is the total duration of this section.")
+                .val(new Date(getSectionDuration(element)).toISOString().split("T")[1].split(".")[0])
         ])
     ]);
 }
@@ -179,6 +201,16 @@ events.userReady.push(function() {
             var container = document.getSelection().anchorNode.nodeType == Node.TEXT_NODE ? document.getSelection().anchorNode.parentNode : document.getSelection().anchorNode;
             
             useContentProperties(container);
+
+            event.stopPropagation();
+        }
+    });
+
+    $("body").on("click focus keyup keydown keypress change paste input", ".script details > summary", function(event) {
+        if (document.getSelection().anchorNode != null) {
+            var container = document.getSelection().anchorNode.nodeType == Node.TEXT_NODE ? document.getSelection().anchorNode.parentNode : document.getSelection().anchorNode;
+            
+            useSectionProperties(container);
 
             event.stopPropagation();
         }
