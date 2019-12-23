@@ -1,6 +1,8 @@
 :root {
     --navBackgroundColour: #00b0f0;
     --navForegroundColour: white;
+    --navMenuBackgroundColour: #029bd3;
+    --navMenuForegroundColour: white;
 }
 
 .script {
