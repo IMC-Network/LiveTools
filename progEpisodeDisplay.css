@@ -1,0 +1,43 @@
+html, body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    color: white;
+}
+
+.teleprompterScript {
+    font-size: 50px;
+}
+
+.teleprompterScript .sectionTitle {
+    background-color: var(--uiColour);
+    color: var(--uiTextColour);
+    padding: 15px;
+    padding-left: 10vw;
+    padding-right: 10vw;
+}
+
+.teleprompterScript section {
+    background-color: black;
+    color: white;
+}
+
+.teleprompterScript section.directive {
+    background-color: white;
+    color: black;
+}
+
+.teleprompterScript {
+    margin-top: 50vh;
+    margin-bottom: 50vh;
+}
+
+.teleprompterArrow {
+    position: fixed;
+    top: 50vh;
+    left: 10px;
+    font-size: 60px;
+    mix-blend-mode: difference;
+}

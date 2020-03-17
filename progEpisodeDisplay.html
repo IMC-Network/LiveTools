@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://imcnetwork.cf/lib/IMCUI/style.css">
         <link rel="stylesheet" href="https://imcnetwork.cf/lib/lcApps/style.css">
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="progEpisodeDisplay.css">
         <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-storage.js"></script>
@@ -37,46 +38,12 @@
         <script src="script.js"></script>
         <script src="prog.js"></script>
         <script src="progEpisode.js"></script>
-        <script src="progEpisodeScript.js"></script>
+        <script src="progEpisodeDisplay.js"></script>
     </head>
     <body>
-        <nav>
-            <a href="index.html"><img src="media/White.png" alt="IMC">&nbsp;<span>LiveTools</span></a>
-            <a href="index.html">Programmes</a>
-            <a href="prog.html" class="progLink">Episodes</a>
-            <a href="progEpisodeSettings.html" class="progEpisodeSettingsLink">Settings</a>
-            <a href="javascript:showSessionsDialog();">Sessions</a>
-            <a href="javascript:toggleMenu('account');" aria-haspopup="true" aria-expanded="false" class="floatRight" data-menu-dropdown="account">
-                Account
-                <i aria-hidden="true" class="material-icons" data-menu-dropdown-icon="account">arrow_drop_down</i>
-            </a>
-            <div role="menu" class="menu farEnd" data-menu="account" import="https://imcnetwork.cf/templates/accountMenu.html"></div>
-        </nav>
-        <main class="noFixedHeight">
-            <header class="loadingSection">
-                <div class="breadcrumbs">
-                    <a href="index.html">Programmes</a>
-                    <a href="prog.html" class="progName progLink"></a>
-                    <a href="progEpsiode.html" class="progEpisodeName progEpisodeLink"></a>
-                    <a href="progEpisodeSettings.html" class="progEpisodeSettingsLink">Script</a>
-                </div>
-            </header>
-            <section class="pageLoader">
-                <img src="https://imcnetwork.cf/LiveCloud/media/Loader.png" alt="Loading..." class="loader" />
-            </section>
-            <div class="loadingSection">
-                <div class="paneView">
-                    <div class="leftPane scriptProperties">
-                        <div class="paneTitle scriptPropertiesTitle">Properties</div>
-                        <div class="scriptPropertiesContent">
-                            Loading...
-                        </div>
-                    </div>
-                    <div class="mainView script"></div>
-                </div>
-            </div>
-        </main>
-        <div class="dialogBackground"></div>
-        <div class="dialog"></div>
+        <div class="teleprompter">
+            <div class="teleprompterScript"></div>
+            <div class="teleprompterArrow"><i class="material-icons">arrow_right</i></div>
+        </div>
     </body>
 </html>
