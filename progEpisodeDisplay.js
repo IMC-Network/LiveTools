@@ -58,8 +58,6 @@ events.userReady.push(function() {
             }
 
             function scrollNextElement() {
-                console.log("Scrolling next");
-
                 getNextElement();
 
                 scrollElement();
