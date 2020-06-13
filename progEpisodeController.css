@@ -1,0 +1,42 @@
+.controlArea {
+    width: calc(100% + 10px);
+}
+
+.controlArea div {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.controlArea .script {
+    height: calc(60vh - 190px) !important;
+    padding-left: 0px;
+    padding-right: 0px;
+    overflow: scroll;
+}
+
+.controlArea .virtualTeleprompter {
+    width: 100%;
+    height: 100%;
+}
+
+.controlButtons {
+    min-height: 40vh;
+    padding: 10px;
+    background-color: var(--uiInputColour);
+}
+
+@media (max-width: 800px) {
+    .controlArea .script {
+        height: calc(50vh - 220px)!important;
+        flex-basis: 100%;
+    }
+
+    .controlArea .virtualArea {
+        height: calc(50vh - 100px);
+        flex-basis: 100%;
+    }
+
+    .controlButtons {
+        min-height: 80px;
+    }
+}

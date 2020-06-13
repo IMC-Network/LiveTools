@@ -43,7 +43,7 @@ events.userReady.push(function() {
                 $("html").animate({
                     scrollTop: currentScrollElement.offset().top + currentScrollElement.height() - ($(window).height() / 2),
                 }, {
-                    duration: (Number(currentScrollElement.attr("data-duration"))* 1000) || getTextDuration(currentScrollElement.text()),
+                    duration: (Number(currentScrollElement.attr("data-duration")) * 1000) || getTextDuration(currentScrollElement.text()),
                     easing: "linear",
                     complete: scrollNextElement
                 });
@@ -74,6 +74,17 @@ events.userReady.push(function() {
 
                 scrollElement();
             }
+        } else if (snapshot.val().command == "stopSection") {
+            $("html").stop();
+        } else if (snapshot.val().command == "jumpToSection") {
+            var currentScrollElement = $(".section[data-key='" + snapshot.val().sectionKey + "'] .sectionContent *:first");
+
+            $("html").animate({
+                scrollTop: currentScrollElement.offset().top - ($(window).height() / 2),
+            }, {
+                duration: 250,
+                easing: "linear"
+            });
         }
     });
 });

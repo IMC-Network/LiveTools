@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://imcnetwork.cf/lib/IMCUI/style.css">
         <link rel="stylesheet" href="https://imcnetwork.cf/lib/lcApps/style.css">
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="progEpisodeController.css">
         <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-storage.js"></script>
@@ -38,6 +39,7 @@
         <script src="prog.js"></script>
         <script src="progEpisode.js"></script>
         <script src="progEpisodeScript.js"></script>
+        <script src="progEpisodeController.js"></script>
     </head>
     <body>
         <nav>
@@ -45,7 +47,6 @@
             <a href="index.html">Programmes</a>
             <a href="prog.html" class="progLink">Episodes</a>
             <a href="progEpisodeSettings.html" class="progEpisodeSettingsLink">Settings</a>
-            <a href="javascript:showSessionsDialog();">Sessions</a>
             <a href="javascript:toggleMenu('account');" aria-haspopup="true" aria-expanded="false" class="floatRight" data-menu-dropdown="account">
                 Account
                 <i aria-hidden="true" class="material-icons" data-menu-dropdown-icon="account">arrow_drop_down</i>
@@ -58,21 +59,25 @@
                     <a href="index.html">Programmes</a>
                     <a href="prog.html" class="progName progLink"></a>
                     <a href="progEpsiode.html" class="progEpisodeName progEpisodeLink"></a>
-                    <a href="progEpisodeScript.html" class="progEpisodeScriptLink">Script</a>
+                    <a href="progEpisodeController.html" class="progEpisodeControllerLink">Controller</a>
                 </div>
             </header>
             <section class="pageLoader">
                 <img src="https://imcnetwork.cf/LiveCloud/media/Loader.png" alt="Loading..." class="loader" />
             </section>
             <div class="loadingSection">
-                <div class="paneView">
-                    <div class="leftPane scriptProperties">
-                        <div class="paneTitle scriptPropertiesTitle">Properties</div>
-                        <div class="scriptPropertiesContent">
-                            Loading...
-                        </div>
+                <div class="controlArea split">
+                    <div class="script"></div>
+                    <div class="virtualArea">
+                        <iframe class="virtualTeleprompter"></iframe>
                     </div>
-                    <div class="mainView script"></div>
+                </div>
+                <div class="controlButtons">
+                    <button onclick="controlPlay();"><i aria-hidden="true" class="material-icons">play_arrow</i> Play</button>
+                    <button onclick="controlStop();"><i aria-hidden="true" class="material-icons">stop</i> Stop</button>
+                    <button onclick="controlPrevious();"><i aria-hidden="true" class="material-icons">skip_previous</i> Prev</button>
+                    <button onclick="controlNext();"><i aria-hidden="true" class="material-icons">skip_next</i> Next</button>
+                    <button onclick="controlRestart();"><i aria-hidden="true" class="material-icons">refresh</i> Restart</button>
                 </div>
             </div>
         </main>
