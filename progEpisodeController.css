@@ -20,7 +20,7 @@
 }
 
 .controlButtons {
-    min-height: 40vh;
+    min-height: calc(40vh - 20px);
     padding: 10px;
     background-color: var(--uiInputColour);
 }
