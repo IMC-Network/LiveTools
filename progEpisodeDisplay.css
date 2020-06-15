@@ -5,6 +5,32 @@ html, body {
     padding: 0;
     background-color: black;
     color: white;
+    overflow: hidden;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100vw - 20px);
+    height: calc(10vh - 20px);
+    padding: 10px;
+    background-color: black;
+    color: white;
+}
+
+.header span {
+    display: inline-block;
+    width: calc(25vw - 10px);
+    font-size: 6vh;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.header span img {
+    width: 100%;
+    height: calc(10vh - 20px);
+    object-fit: contain;
 }
 
 .teleprompterScript {
