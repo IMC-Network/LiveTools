@@ -66,3 +66,27 @@ html, body {
     font-size: 60px;
     mix-blend-mode: difference;
 }
+
+@media (max-width: 900px) {
+    .currentTime {
+        width: calc(37.5vw - 20px)!important;
+    }
+
+    .elapsedTime {
+        display: none!important;
+    }
+
+    .remainingTime {
+        width: calc(37.5vw - 20px)!important;
+    }
+}
+
+@media (max-width: 700px) {
+    .currentTime {
+        display: none!important;
+    }
+
+    .remainingTime {
+        width: calc(75vw - 20px)!important;
+    }
+}
