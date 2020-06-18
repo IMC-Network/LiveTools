@@ -41,6 +41,10 @@ function showAddOptions() {
 }
 
 function showItemPreview(itemKey) {
+    if (currentPreviewPlayerElement != null) {
+        videojs(currentPreviewPlayerElement).dispose();
+    }
+
     $(".previewTitle").html("").append([
         $("<a>")
             .html("<i aria-hidden='true' class='material-icons'>arrow_left</i> Back")
