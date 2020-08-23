@@ -25,7 +25,7 @@ function showAddOptions() {
                         
                         newItemRef.set({
                             url: $("#addItemFromSourceUrl").val().trim(),
-                            name: $("#addItemFromSourceUrl").val().trim().match(/^(http|https):\/\/.*\/(.*)$/)[2].split(".")[0]
+                            slug: $("#addItemFromSourceUrl").val().trim().match(/^(http|https):\/\/.*\/(.*)$/)[2].split(".")[0]
                         }).then(function() {
                             showItemPreview(newItemRef.key);
                         });
@@ -62,8 +62,8 @@ function showItemPreview(itemKey) {
         $(".previewContent").html("").append([
             $("<div class='previewArea spacedBottom'>"),
             $("<label>").append([
-                $("<span>").text("Name"),
-                $("<input>").val(snapshot.val().name)
+                $("<span>").text("Slug"),
+                $("<input>").val(snapshot.val().slug)
             ]),
             $("<label>").append([
                 $("<span>").text("Source URL"),
@@ -100,7 +100,7 @@ events.userReady.push(function() {
                 .attr("data-key", childSnapshot.key)
                     .append([
                         $("<img class='libraryItemThumbnail'>").attr("src", "https://imcnetwork.cf/LiveCloud/media/Blank%20App.png"),
-                        $("<span class='libraryItemName'>").text(childSnapshot.val().name)
+                        $("<span class='libraryItemSlug'>").text(childSnapshot.val().slug)
                     ])
                     .click(function(event) {
                         showItemPreview(childSnapshot.key);
