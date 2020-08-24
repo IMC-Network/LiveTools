@@ -80,8 +80,9 @@ function showItemPreview(itemKey) {
 
                                 if (itemAttribute.key == "slug") {
                                     $(".libraryItem[data-key='" + itemKey + "'] .libraryItemSlug").text($(event.target).val());
-                                    $(".libraryItem[data-key='" + itemKey + "']").addClass("selected");
                                 }
+
+                                $(".libraryItem[data-key='" + itemKey + "']").addClass("selected");
                             })
                     ])
                 );
