@@ -25,7 +25,7 @@ function showAddOptions() {
                         
                         newItemRef.set({
                             url: $("#addItemFromSourceUrl").val().trim(),
-                            slug: $("#addItemFromSourceUrl").val().trim().match(/^(http|https):\/\/.*\/(.*)$/)[2].split(".")[0]
+                            slug: ($("#addItemFromSourceUrl").val().trim().match(/^(http|https):\/\/.*\/(.*)$/)[2].split(".")[0] || "Untitled").trim()
                         }).then(function() {
                             showItemPreview(newItemRef.key);
                         });
@@ -60,8 +60,8 @@ function showItemPreview(itemKey) {
 
     firebase.database().ref(episodePath + "/content/library/" + itemKey).once("value", function(snapshot) {
         var itemAttributes = [
-            {key: "slug", label: "Slug"},
-            {key: "url", label: "Source URL"}
+            {key: "slug", label: "Slug", mandatory: true},
+            {key: "url", label: "Source URL", mandatory: true}
         ];
 
         $(".previewContent").html("").append($("<div class='previewArea spacedBottom'>"));
@@ -74,15 +74,17 @@ function showItemPreview(itemKey) {
                         $("<input>")
                             .val(snapshot.val()[itemAttribute.key])
                             .change(function(event) {
-                                firebase.database().ref(episodePath + "/content/library/" + itemKey + "/" + itemAttribute.key).set(
-                                    $(event.target).val()
-                                );
+                                if (!itemAttribute.mandatory || $(event.target).val().trim() != "") {
+                                    firebase.database().ref(episodePath + "/content/library/" + itemKey + "/" + itemAttribute.key).set(
+                                        $(event.target).val()
+                                    );
 
-                                if (itemAttribute.key == "slug") {
-                                    $(".libraryItem[data-key='" + itemKey + "'] .libraryItemSlug").text($(event.target).val());
+                                    if (itemAttribute.key == "slug") {
+                                        $(".libraryItem[data-key='" + itemKey + "'] .libraryItemSlug").text($(event.target).val());
+                                    }
+
+                                    $(".libraryItem[data-key='" + itemKey + "']").addClass("selected");
                                 }
-
-                                $(".libraryItem[data-key='" + itemKey + "']").addClass("selected");
                             })
                     ])
                 );
