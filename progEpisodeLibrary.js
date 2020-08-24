@@ -124,6 +124,7 @@ events.userReady.push(function() {
                     ])
                     .click(function(event) {
                         showItemPreview(childSnapshot.key);
+                        $(".rightPane a:first-of-type").focus();
 
                         event.stopPropagation();
                     })
