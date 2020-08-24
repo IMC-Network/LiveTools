@@ -58,18 +58,35 @@ function showItemPreview(itemKey) {
     $(".libraryItem").removeClass("selected");
     $(".libraryItem[data-key='" + itemKey + "']").addClass("selected");
 
-    firebase.database().ref(episodePath + "/content/library/" + itemKey).on("value", function(snapshot) {
-        $(".previewContent").html("").append([
-            $("<div class='previewArea spacedBottom'>"),
-            $("<label>").append([
-                $("<span>").text("Slug"),
-                $("<input>").val(snapshot.val().slug)
-            ]),
-            $("<label>").append([
-                $("<span>").text("Source URL"),
-                $("<input>").val(snapshot.val().url)
-            ])
-        ]);
+    firebase.database().ref(episodePath + "/content/library/" + itemKey).once("value", function(snapshot) {
+        var itemAttributes = [
+            {key: "slug", label: "Slug"},
+            {key: "url", label: "Source URL"}
+        ];
+
+        $(".previewContent").html("").append($("<div class='previewArea spacedBottom'>"));
+
+        for (var i = 0; i < itemAttributes.length; i++) {
+            (function(itemAttribute) {
+                $(".previewContent").append(
+                    $("<label>").append([
+                        $("<span>").text(itemAttribute.label),
+                        $("<input>")
+                            .val(snapshot.val()[itemAttribute.key])
+                            .change(function(event) {
+                                firebase.database().ref(episodePath + "/content/library/" + itemKey + "/" + itemAttribute.key).set(
+                                    $(event.target).val()
+                                );
+
+                                if (itemAttribute.key == "slug") {
+                                    $(".libraryItem[data-key='" + itemKey + "'] .libraryItemSlug").text($(event.target).val());
+                                    $(".libraryItem[data-key='" + itemKey + "']").addClass("selected");
+                                }
+                            })
+                    ])
+                );
+            })(itemAttributes[i]);
+        }
 
         if (snapshot.val().url.endsWith(".mp4")) {
             $(".previewArea").append(
