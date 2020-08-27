@@ -106,6 +106,12 @@ function showItemPreview(itemKey) {
                 currentPreviewPlayer.width($(".previewArea").width());
                 currentPreviewPlayer.height($(".previewArea").width() * RATIO_16BY9);
             });
+        } else if (snapshot.val().url.endsWith(".png") || snapshot.val().url.endsWith(".jpg") || snapshot.val().url.endsWith(".jpeg") || snapshot.val().url.endsWith(".gif")) {
+            $(".previewArea").append(
+                $("<img class='preview'>")
+                    .attr("src", snapshot.val().url)
+                    .attr("alt", "Image preview")
+            );
         }
     });
 }
