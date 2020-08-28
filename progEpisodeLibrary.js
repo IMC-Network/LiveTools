@@ -122,11 +122,32 @@ events.userReady.push(function() {
         $(".library").html("");
 
         snapshot.forEach(function(childSnapshot) {
+            var thumbnail;
+
+            if (childSnapshot.val().url.endsWith(".mp4")) {
+                thumbnail = $("<video class='libraryItemThumbnail'>")
+                    .attr("aria-label", "Video")
+                    .append(
+                        $("<source>").attr("src", childSnapshot.val().url + "#t=5")
+                    )
+                ;
+            } else if (childSnapshot.val().url.endsWith(".png") || childSnapshot.val().url.endsWith(".jpg") || childSnapshot.val().url.endsWith(".jpeg") || childSnapshot.val().url.endsWith(".gif")) {
+                thumbnail = $("<img class='libraryItemThumbnail'>")
+                    .attr("alt", "Photo")
+                    .attr("src", childSnapshot.val().url)
+                ;
+            } else {
+                thumbnail = $("<img class='libraryItemThumbnail'>")
+                    .attr("alt", "Unknown item")
+                    .attr("src", "https://imcnetwork.cf/LiveCloud/media/Blank%20App.png")
+                ;
+            }
+
             $(".library").append(
                 $("<button class='libraryItem'>")
                 .attr("data-key", childSnapshot.key)
                     .append([
-                        $("<img class='libraryItemThumbnail'>").attr("src", "https://imcnetwork.cf/LiveCloud/media/Blank%20App.png"),
+                        thumbnail,
                         $("<span class='libraryItemSlug'>").text(childSnapshot.val().slug)
                     ])
                     .click(function(event) {
