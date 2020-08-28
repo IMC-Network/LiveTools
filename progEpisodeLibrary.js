@@ -61,7 +61,8 @@ function showItemPreview(itemKey) {
     firebase.database().ref(episodePath + "/content/library/" + itemKey).once("value", function(snapshot) {
         var itemAttributes = [
             {key: "slug", label: "Slug", mandatory: true},
-            {key: "url", label: "Source URL", mandatory: true}
+            {key: "url", label: "Source URL", mandatory: true},
+            {key: "notes", label: "Notes", type: "textarea"}
         ];
 
         $(".previewContent").html("").append($("<div class='previewArea spacedBottom'>"));
@@ -71,7 +72,7 @@ function showItemPreview(itemKey) {
                 $(".previewContent").append(
                     $("<label>").append([
                         $("<span>").text(itemAttribute.label),
-                        $("<input>")
+                        $(itemAttribute.type == "textarea" ? "<textarea>" : "<input>")
                             .val(snapshot.val()[itemAttribute.key])
                             .change(function(event) {
                                 if (!itemAttribute.mandatory || $(event.target).val().trim() != "") {
