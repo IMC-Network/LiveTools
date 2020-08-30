@@ -90,3 +90,7 @@ html, body {
         width: calc(75vw - 20px)!important;
     }
 }
+
+::-webkit-scrollbar {
+    display: none;
+}
