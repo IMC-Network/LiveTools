@@ -62,6 +62,7 @@ function showItemPreview(itemKey) {
         var itemAttributes = [
             {key: "slug", label: "Slug", mandatory: true},
             {key: "url", label: "Source URL", mandatory: true},
+            {key: "id", label: "Identifier", placeholder: "(Unassigned)"},
             {key: "notes", label: "Notes", type: "textarea"}
         ];
 
@@ -73,6 +74,7 @@ function showItemPreview(itemKey) {
                     $("<label>").append([
                         $("<span>").text(itemAttribute.label),
                         $(itemAttribute.type == "textarea" ? "<textarea>" : "<input>")
+                            .attr("placeholder", itemAttribute.placeholder)
                             .val(snapshot.val()[itemAttribute.key])
                             .change(function(event) {
                                 if (!itemAttribute.mandatory || $(event.target).val().trim() != "") {
