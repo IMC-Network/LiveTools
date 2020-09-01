@@ -3,10 +3,14 @@ const RATIO_16BY9 = 9 / 16;
 var currentPreviewPlayer;
 var currentPreviewPlayerElement = null;
 
+var selectedItem = null;
+
 function showAddOptions() {
     if (currentPreviewPlayerElement != null) {
         videojs(currentPreviewPlayerElement).dispose();
     }
+
+    selectedItem = null;
 
     $(".previewTitle").text("Add item");
 
@@ -44,6 +48,8 @@ function showItemPreview(itemKey) {
     if (currentPreviewPlayerElement != null) {
         videojs(currentPreviewPlayerElement).dispose();
     }
+
+    selectedItem = itemKey;
 
     $(".previewTitle").html("").append([
         $("<a>")
@@ -94,9 +100,37 @@ function showItemPreview(itemKey) {
             })(itemAttributes[i]);
         }
 
+        $(".previewContent").append([
+            $("<hr>"),
+            $("<button>")
+                .text("Open")
+                .click(function() {
+                    window.open(snapshot.val().url);
+                })
+            ,
+            " ",
+            $("<button>")
+                .text("Delete")
+                .click(function() {
+                    dialog("Delete item", `
+                        Do you really want to delete this item? The item's
+                        content may still be available from the target URL.
+                    `, [
+                        {text: "No", onclick: "closeDialog();", type: "secondary"},
+                        {text: "Yes", onclick: "deleteSelectedItem();", type: "primary"}
+                    ]);
+                })
+        ]);
+
         if (snapshot.val().url.endsWith(".mp4")) {
             $(".previewArea").append(
                 $("<video controls width='300' height='200' class='video-js' id='previewPlayer'>")
+                    .on("error", function() {
+                        $(".previewArea").html("").append(
+                            $("<p class='center'>")
+                                .text("The contents of this item don't seem to exist. Check the URL to see if it is correct.")
+                        );
+                    })
             );
 
             currentPreviewPlayerElement = $("#previewPlayer")[0];
@@ -114,9 +148,22 @@ function showItemPreview(itemKey) {
                 $("<img class='preview'>")
                     .attr("src", snapshot.val().url)
                     .attr("alt", "Image preview")
+                    .on("error", function() {
+                        $(".previewArea").html("").append(
+                            $("<p class='center'>")
+                                .text("The contents of this item don't seem to exist. Check the URL to see if it is correct.")
+                        );
+                    })
             );
         }
     });
+}
+
+function deleteSelectedItem() {
+    firebase.database().ref(episodePath + "/content/library/" + selectedItem).remove();
+
+    closeDialog();
+    showAddOptions();
 }
 
 events.userReady.push(function() {
@@ -137,6 +184,10 @@ events.userReady.push(function() {
                 thumbnail = $("<img class='libraryItemThumbnail'>")
                     .attr("alt", "Photo")
                     .attr("src", childSnapshot.val().url)
+                    .on("error", function() {
+                        this.onerror = null;
+                        this.src = "https://imcnetwork.cf/LiveCloud/media/Blank App.png";
+                    })
                 ;
             } else {
                 thumbnail = $("<img class='libraryItemThumbnail'>")
