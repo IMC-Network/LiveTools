@@ -113,8 +113,9 @@ function showItemPreview(itemKey) {
                 .text("Delete")
                 .click(function() {
                     dialog("Delete item", `
-                        Do you really want to delete this item? The item's
-                        content may still be available from the target URL.
+                        Do you really want to delete this item? The item's data
+                        will be permanently lost, but the contents of the item
+                        may still be available at the target URL.
                     `, [
                         {text: "No", onclick: "closeDialog();", type: "secondary"},
                         {text: "Yes", onclick: "deleteSelectedItem();", type: "primary"}
