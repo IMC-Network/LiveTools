@@ -61,7 +61,7 @@ html, body {
 
 .teleprompterArrow {
     position: fixed;
-    top: calc(50vh - 30px);
+    top: 50vh;
     left: 10px;
     font-size: 60px;
     mix-blend-mode: difference;
