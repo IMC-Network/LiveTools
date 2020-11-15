@@ -41,7 +41,7 @@ events.userReady.push(function() {
         $(".currentTime").text(
             String(currentTime.getHours()).padStart(2, "0") + ":" +
             String(currentTime.getMinutes()).padStart(2,"0") + ":" +
-            String(currentTime.getSeconds()).padStart(2, "0") + ";" +
+            String(currentTime.getSeconds()).padStart(2, "0") + ":" +
             String(Math.floor(currentTime.getMilliseconds() * 24 / 1000)).padStart(2, "0")
         );
 
@@ -54,7 +54,7 @@ events.userReady.push(function() {
         $(".elapsedTime").text(
             String(elapsedHours).padStart(2, "0") + ":" +
             String(elapsedMinutes).padStart(2,"0") + ":" +
-            String(elapsedSeconds).padStart(2, "0") + ";" +
+            String(elapsedSeconds).padStart(2, "0") + ":" +
             String(elapsedFrames).padStart(2, "0")
         );
 
@@ -68,7 +68,7 @@ events.userReady.push(function() {
             $(".remainingTime").text(
                 String(remainingHours).padStart(2, "0") + ":" +
                 String(remainingMinutes).padStart(2,"0") + ":" +
-                String(remainingSeconds).padStart(2, "0") + ";" +
+                String(remainingSeconds).padStart(2, "0") + ":" +
                 String(remainingFrames).padStart(2, "0")
             );
         } else {
